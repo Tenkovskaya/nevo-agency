@@ -1149,5 +1149,64 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
+
+<script>
+(function() {
+  var BOT_TOKEN = '8740844003:AAGMHjIzlCwFTx2yRj7cjTeM4C2c5rnnQKg';
+  var CHAT_ID = '541797367';
+
+  function sendToTelegram(data) {
+    var text = "* Новая заявка с сайта Nevo *\n\n"
+      + "Имя: " + data.name + "\n"
+      + "Контакт: " + data.contact + "\n"
+      + "Ниша: " + data.niche + "\n"
+      + "Комментарий: " + (data.comment || "—") + "\n\n"
+      + new Date().toLocaleString('ru-RU', {timeZone:'Europe/Moscow'});
+    return fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({chat_id: CHAT_ID, text: text, parse_mode: 'Markdown'})
+    });
+  }
+
+  function setBtn(btn, text, bg, disabled) {
+    btn.textContent = text;
+    btn.style.background = bg || '';
+    btn.disabled = disabled;
+  }
+
+  document.addEventListener('click', async function(e) {
+    var btn = e.target.closest('.form-submit');
+    if (!btn) return;
+    e.preventDefault();
+    var isRu = document.body.classList.contains('lang-ru');
+    var section = document.getElementById('contact');
+    var inputs = section.querySelectorAll('.form-input');
+    var name = inputs[0].value.trim();
+    var contact = inputs[1].value.trim();
+    var niche = inputs[2].value;
+    var textareas = Array.from(section.querySelectorAll('textarea.form-input'));
+    var textarea = textareas.find(function(t){ return t.offsetParent !== null; });
+    var comment = textarea ? textarea.value.trim() : '';
+
+    inputs[0].style.borderColor = '';
+    inputs[1].style.borderColor = '';
+    if (!name) { inputs[0].style.borderColor = '#e24b4a'; return; }
+    if (!contact) { inputs[1].style.borderColor = '#e24b4a'; return; }
+
+    setBtn(btn, isRu ? 'Отправляем...' : 'Sending...', '#555', true);
+
+    try {
+      await sendToTelegram({name:name, contact:contact, niche:niche, comment:comment});
+      setBtn(btn, isRu ? 'Заявка отправлена!' : 'Request sent!', '#2d9e5f', true);
+      inputs[0].value = ''; inputs[1].value = '';
+      if (textarea) textarea.value = '';
+      setTimeout(function(){ setBtn(btn, isRu ? 'Отправить заявку' : 'Send request', '', false); }, 5000);
+    } catch(err) {
+      setBtn(btn, isRu ? 'Ошибка, повторите' : 'Error, try again', '#e24b4a', false);
+    }
+  });
+})();
+</script>
 </body>
 </html>
