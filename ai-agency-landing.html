@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nevo — AI Content Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #090909;
+    --surface: #111111;
+    --surface2: #181818;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #f0ede8;
+    --muted: #7a7772;
+    --accent: #c8f045;
+    --accent2: #7b61ff;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform .15s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(200,240,69,0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all .08s linear;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* Lang switcher */
+  .lang-switch {
+    position: fixed;
+    top: 24px; right: 24px;
+    z-index: 500;
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 999px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .lang-btn {
+    padding: 7px 16px;
+    cursor: none;
+    color: var(--muted);
+    transition: all .2s;
+    letter-spacing: .05em;
+  }
+  .lang-btn.active {
+    background: var(--accent);
+    color: #090909;
+    font-weight: 400;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s, background .3s;
+  }
+  nav.scrolled {
+    background: rgba(9,9,9,0.92);
+    border-color: var(--border);
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .logo span { color: var(--accent); }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    font-size: 13px;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+  .nav-links a {
+    color: inherit;
+    text-decoration: none;
+    transition: color .2s;
+    letter-spacing: .03em;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--accent);
+    color: #090909;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: none;
+    transition: opacity .2s, transform .15s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { opacity: .88; transform: translateY(-1px); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Grid bg */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-title {
+    font-size: clamp(52px, 8vw, 108px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.04em;
+    max-width: 900px;
+    margin-bottom: 32px;
+  }
+  .hero-title .line2 { color: var(--accent); display: block; }
+  .hero-title .dim { color: var(--muted); }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.65;
+    font-weight: 400;
+    margin-bottom: 48px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #090909;
+    padding: 16px 36px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: none;
+    transition: opacity .2s, transform .15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: .88; transform: translateY(-2px); }
+
+  .btn-ghost {
+    color: var(--muted);
+    font-size: 13px;
+    font-family: var(--mono);
+    text-decoration: none;
+    letter-spacing: .05em;
+    cursor: none;
+    transition: color .2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-ghost:hover { color: var(--text); }
+  .btn-ghost::after { content: '→'; }
+
+  /* Marquee */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 0;
+    margin: 0;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 28s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .marquee-item::after {
+    content: '·';
+    color: var(--accent);
+    font-size: 16px;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Sections */
+  section { padding: 120px 48px; }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::before { content: ''; display: block; width: 16px; height: 1px; background: var(--accent); }
+  .section-title {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.65;
+    margin-bottom: 64px;
+  }
+
+  /* Services */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .service-card {
+    background: var(--surface);
+    padding: 40px 36px;
+    transition: background .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card:hover { background: var(--surface2); }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s ease;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: .1em;
+    margin-bottom: 20px;
+  }
+  .service-name {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -.02em;
+  }
+  .service-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 20px;
+  }
+  .stag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 4px 10px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    color: var(--muted);
+    letter-spacing: .04em;
+  }
+
+  /* Pricing */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .price-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px 32px;
+    transition: border-color .25s;
+    position: relative;
+  }
+  .price-card:hover { border-color: var(--border2); }
+  .price-card.featured {
+    border-color: var(--accent);
+    background: var(--surface2);
+  }
+  .price-badge {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #090909;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .1em;
+    padding: 4px 14px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .price-tier {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .price-amount {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -.04em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .price-amount span {
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--muted);
+    vertical-align: super;
+    margin-right: 2px;
+  }
+  .price-period {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .price-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .price-features li {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+  .price-features li::before {
+    content: '→';
+    color: var(--accent);
+    flex-shrink: 0;
+    font-size: 12px;
+    margin-top: 1px;
+  }
+  .price-cta {
+    display: block;
+    text-align: center;
+    padding: 13px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: none;
+    transition: all .2s;
+  }
+  .price-cta.outline {
+    border: 1px solid var(--border2);
+    color: var(--text);
+  }
+  .price-cta.outline:hover { border-color: var(--accent); color: var(--accent); }
+  .price-cta.filled {
+    background: var(--accent);
+    color: #090909;
+  }
+  .price-cta.filled:hover { opacity: .88; }
+
+  /* Process */
+  .process-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 700px;
+  }
+  .process-step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 32px;
+    padding: 36px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .process-step:first-child { border-top: 1px solid var(--border); }
+  .p-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: .1em;
+    padding-top: 4px;
+  }
+  .p-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    margin-bottom: 8px;
+  }
+  .p-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* Stats */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 80px;
+  }
+  .stat-box {
+    background: var(--surface);
+    padding: 40px 36px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -.04em;
+    line-height: 1;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .08em;
+  }
+
+  /* CTA section */
+  .cta-section {
+    text-align: center;
+    padding: 120px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(200,240,69,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section .section-title { font-size: clamp(40px, 6vw, 80px); }
+  .cta-section .section-sub { margin: 0 auto 48px; text-align: center; }
+
+  /* Contact form */
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .form-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s;
+  }
+  .form-input:focus { border-color: var(--accent); }
+  .form-input::placeholder { color: var(--muted); }
+  textarea.form-input { resize: none; height: 120px; font-family: var(--sans); }
+  select.form-input { cursor: none; }
+  select.form-input option { background: var(--surface); }
+  .form-submit {
+    width: 100%;
+    background: var(--accent);
+    color: #090909;
+    border: none;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: none;
+    transition: opacity .2s, transform .15s;
+    margin-top: 8px;
+  }
+  .form-submit:hover { opacity: .88; transform: translateY(-1px); }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .contact-item-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .contact-item-val {
+    font-size: 16px;
+    color: var(--text);
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+  .footer-right {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    gap: 28px;
+  }
+  .footer-right a { color: inherit; text-decoration: none; transition: color .2s; }
+  .footer-right a:hover { color: var(--text); }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-tag { animation: fadeUp .6s ease both; }
+  .hero-title { animation: fadeUp .7s .1s ease both; }
+  .hero-sub { animation: fadeUp .7s .2s ease both; }
+  .hero-actions { animation: fadeUp .7s .3s ease both; }
+
+  /* Flicker for mono texts */
+  @keyframes flicker {
+    0%,100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.5; }
+    94% { opacity: 1; }
+  }
+  .hero-tag { animation: fadeUp .6s ease both, flicker 8s 2s infinite; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    section { padding: 80px 24px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .cta-section { padding: 80px 24px; }
+    .lang-switch { top: 16px; right: 16px; }
+  }
+
+  /* Hidden by lang */
+  [data-ru], [data-en] { display: block; }
+  .lang-en [data-ru] { display: none !important; }
+  .lang-ru [data-en] { display: none !important; }
+  span[data-ru], span[data-en] { display: inline !important; }
+  .lang-en span[data-ru] { display: none !important; }
+  .lang-ru span[data-en] { display: none !important; }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body class="lang-ru">
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Lang Switcher -->
+<div class="lang-switch">
+  <div class="lang-btn active" id="btn-ru" onclick="setLang('ru')">RU</div>
+  <div class="lang-btn" id="btn-en" onclick="setLang('en')">EN</div>
+</div>
+
+<!-- Nav -->
+<nav id="navbar">
+  <a href="#" class="logo">nevo<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#services" data-ru>Услуги</a><a href="#services" data-en>Services</a></li>
+    <li><a href="#pricing" data-ru>Цены</a><a href="#pricing" data-en>Pricing</a></li>
+    <li><a href="#process" data-ru>Процесс</a><a href="#process" data-en>Process</a></li>
+    <li><a href="#contact" data-ru>Контакт</a><a href="#contact" data-en>Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">
+    <span data-ru>Начать проект</span>
+    <span data-en>Start project</span>
+  </a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-tag">
+    <span data-ru>AI-контент агентство · Москва / Remote</span>
+    <span data-en>AI content agency · Moscow / Remote</span>
+  </div>
+  <h1 class="hero-title">
+    <span data-ru>Контент,<br><span class="line2">который продаёт</span></span>
+    <span data-en>Content<br><span class="line2">that converts</span></span>
+  </h1>
+  <p class="hero-sub">
+    <span data-ru>Производим контент, email-воронки и рекламные тексты с помощью ИИ — быстрее агентств, дешевле штатника.</span>
+    <span data-en>We produce content, email sequences and ad copy using AI — faster than agencies, cheaper than in-house.</span>
+  </p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">
+      <span data-ru>Получить 3 примера бесплатно</span>
+      <span data-en>Get 3 free samples</span>
+    </a>
+    <a href="#services" class="btn-ghost">
+      <span data-ru>Смотреть услуги</span>
+      <span data-en>See services</span>
+    </a>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item" data-ru>Контент для соцсетей</span>
+    <span class="marquee-item" data-ru>Email-цепочки</span>
+    <span class="marquee-item" data-ru>SEO-тексты</span>
+    <span class="marquee-item" data-ru>Рекламные копирайты</span>
+    <span class="marquee-item" data-ru>Карточки товаров</span>
+    <span class="marquee-item" data-ru>Автоматизация контента</span>
+    <span class="marquee-item" data-en>Social content</span>
+    <span class="marquee-item" data-en>Email sequences</span>
+    <span class="marquee-item" data-en>SEO articles</span>
+    <span class="marquee-item" data-en>Ad copywriting</span>
+    <span class="marquee-item" data-en>Product descriptions</span>
+    <span class="marquee-item" data-en>Content automation</span>
+    <!-- dupe for seamless loop -->
+    <span class="marquee-item" data-ru>Контент для соцсетей</span>
+    <span class="marquee-item" data-ru>Email-цепочки</span>
+    <span class="marquee-item" data-ru>SEO-тексты</span>
+    <span class="marquee-item" data-ru>Рекламные копирайты</span>
+    <span class="marquee-item" data-ru>Карточки товаров</span>
+    <span class="marquee-item" data-ru>Автоматизация контента</span>
+    <span class="marquee-item" data-en>Social content</span>
+    <span class="marquee-item" data-en>Email sequences</span>
+    <span class="marquee-item" data-en>SEO articles</span>
+    <span class="marquee-item" data-en>Ad copywriting</span>
+    <span class="marquee-item" data-en>Product descriptions</span>
+    <span class="marquee-item" data-en>Content automation</span>
+  </div>
+</div>
+
+<!-- Stats -->
+<section>
+  <div class="stats-row reveal">
+    <div class="stat-box">
+      <span class="stat-num">3×</span>
+      <span class="stat-label" data-ru>Быстрее обычного агентства</span>
+      <span class="stat-label" data-en>Faster than agencies</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">80%</span>
+      <span class="stat-label" data-ru>Экономия vs штатный копирайтер</span>
+      <span class="stat-label" data-en>Saved vs in-house writer</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">48h</span>
+      <span class="stat-label" data-ru>Старт работы после брифа</span>
+      <span class="stat-label" data-en>Time to first deliverable</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">6</span>
+      <span class="stat-label" data-ru>Ниш в работе прямо сейчас</span>
+      <span class="stat-label" data-en>Active verticals</span>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <div class="section-label" data-ru>Услуги</div>
+  <div class="section-label" data-en>Services</div>
+  <h2 class="section-title reveal">
+    <span data-ru>Что мы делаем</span>
+    <span data-en>What we do</span>
+  </h2>
+  <p class="section-sub reveal">
+    <span data-ru>Три направления, каждое — закрытая система. Бриф → производство → публикация.</span>
+    <span data-en>Three tracks, each a closed loop. Brief → production → publish.</span>
+  </p>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <div class="service-name" data-ru>Контент-машина</div>
+      <div class="service-name" data-en>Content engine</div>
+      <div class="service-desc" data-ru>Посты для Telegram, Instagram, LinkedIn — регулярно, в голосе вашего бренда. Без вашего участия после брифа.</div>
+      <div class="service-desc" data-en>Posts for LinkedIn, Twitter, Instagram — consistent, on-brand voice. Zero involvement after the brief.</div>
+      <div class="service-tags">
+        <span class="stag">Telegram</span>
+        <span class="stag">Instagram</span>
+        <span class="stag">LinkedIn</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-name" data-ru>Email-воронки</div>
+      <div class="service-name" data-en>Email sequences</div>
+      <div class="service-desc" data-ru>Welcome-цепочки, реактивация базы, продающие серии. Настраиваем один раз — работает на автопилоте.</div>
+      <div class="service-desc" data-en>Welcome flows, re-engagement, sales sequences. Set once — runs on autopilot indefinitely.</div>
+      <div class="service-tags">
+        <span class="stag">Klaviyo</span>
+        <span class="stag">Mailchimp</span>
+        <span class="stag">Unisender</span>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-name" data-ru>Рекламные тексты</div>
+      <div class="service-name" data-en>Ad copy & landing pages</div>
+      <div class="service-desc" data-ru>УТП, заголовки, тексты объявлений, лендинги. Тестируем 5–10 вариантов — оставляем победителя.</div>
+      <div class="service-desc" data-en>USPs, headlines, ad creatives, landing pages. We test 5–10 variants and keep the winner.</div>
+      <div class="service-tags">
+        <span class="stag">Meta Ads</span>
+        <span class="stag">Google Ads</span>
+        <span class="stag">Яндекс</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+  <div class="section-label" data-ru>Цены</div>
+  <div class="section-label" data-en>Pricing</div>
+  <h2 class="section-title reveal">
+    <span data-ru>Понятные пакеты</span>
+    <span data-en>Transparent plans</span>
+  </h2>
+  <p class="section-sub reveal">
+    <span data-ru>Фиксированная цена, никаких скрытых платежей. Платишь раз в месяц — получаешь весь объём.</span>
+    <span data-en>Fixed monthly fee, no hidden charges. One invoice — everything included.</span>
+  </p>
+  <div class="pricing-grid reveal">
+    <div class="price-card">
+      <div class="price-tier" data-ru>Старт</div>
+      <div class="price-tier" data-en>Starter</div>
+      <div class="price-amount"><span>$</span>300</div>
+      <div class="price-period" data-ru>в месяц</div>
+      <div class="price-period" data-en>per month</div>
+      <ul class="price-features">
+        <li data-ru>4 поста в неделю</li>
+        <li data-en>4 posts per week</li>
+        <li data-ru>2 email в неделю</li>
+        <li data-en>2 emails per week</li>
+        <li data-ru>1 канал</li>
+        <li data-en>1 channel</li>
+        <li data-ru>Ежемесячный отчёт</li>
+        <li data-en>Monthly report</li>
+      </ul>
+      <a href="#contact" class="price-cta outline" data-ru>Выбрать</a>
+      <a href="#contact" class="price-cta outline" data-en>Get started</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge" data-ru>Популярный выбор</div>
+      <div class="price-badge" data-en>Most popular</div>
+      <div class="price-tier" data-ru>Основной</div>
+      <div class="price-tier" data-en>Growth</div>
+      <div class="price-amount"><span>$</span>800</div>
+      <div class="price-period" data-ru>в месяц</div>
+      <div class="price-period" data-en>per month</div>
+      <ul class="price-features">
+        <li data-ru>Контент для 2 каналов</li>
+        <li data-en>Content for 2 channels</li>
+        <li data-ru>Email-цепочка (до 6 писем)</li>
+        <li data-en>Email sequence (up to 6 emails)</li>
+        <li data-ru>1 лендинг в месяц</li>
+        <li data-en>1 landing page per month</li>
+        <li data-ru>Тексты для рекламы</li>
+        <li data-en>Ad copy included</li>
+        <li data-ru>Еженедельный отчёт</li>
+        <li data-en>Weekly report</li>
+      </ul>
+      <a href="#contact" class="price-cta filled" data-ru>Начать</a>
+      <a href="#contact" class="price-cta filled" data-en>Start now</a>
+    </div>
+    <div class="price-card">
+      <div class="price-tier" data-ru>Полное ведение</div>
+      <div class="price-tier" data-en>Full stack</div>
+      <div class="price-amount"><span>$</span>1800</div>
+      <div class="price-period" data-ru>в месяц</div>
+      <div class="price-period" data-en>per month</div>
+      <ul class="price-features">
+        <li data-ru>Всё из «Основного»</li>
+        <li data-en>Everything in Growth</li>
+        <li data-ru>Настройка рекламных кампаний</li>
+        <li data-en>Ad campaign management</li>
+        <li data-ru>Автоматизация на Make.com</li>
+        <li data-en>Make.com automation</li>
+        <li data-ru>Выделенный менеджер</li>
+        <li data-en>Dedicated manager</li>
+        <li data-ru>Приоритетная поддержка 24/7</li>
+        <li data-en>Priority support 24/7</li>
+      </ul>
+      <a href="#contact" class="price-cta outline" data-ru>Выбрать</a>
+      <a href="#contact" class="price-cta outline" data-en>Get started</a>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section id="process">
+  <div class="section-label" data-ru>Процесс</div>
+  <div class="section-label" data-en>Process</div>
+  <h2 class="section-title reveal">
+    <span data-ru>Как это работает</span>
+    <span data-en>How it works</span>
+  </h2>
+  <div class="process-list reveal">
+    <div class="process-step">
+      <div class="p-num">Step 01</div>
+      <div>
+        <div class="p-title" data-ru>Бриф за 15 минут</div>
+        <div class="p-title" data-en>15-minute brief</div>
+        <div class="p-desc" data-ru>Заполняешь форму или созваниваемся. Рассказываешь о продукте, аудитории, тоне — один раз и навсегда.</div>
+        <div class="p-desc" data-en>Fill a form or hop on a call. Tell us about your product, audience, tone of voice — once and that's it.</div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="p-num">Step 02</div>
+      <div>
+        <div class="p-title" data-ru>3 примера бесплатно</div>
+        <div class="p-title" data-en>3 free samples</div>
+        <div class="p-desc" data-ru>В течение 48 часов присылаем примеры контента под твою нишу. Видишь качество до оплаты.</div>
+        <div class="p-desc" data-en>Within 48 hours we send content samples for your niche. You see quality before paying anything.</div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="p-num">Step 03</div>
+      <div>
+        <div class="p-title" data-ru>Запуск и автопилот</div>
+        <div class="p-title" data-en>Launch & autopilot</div>
+        <div class="p-desc" data-ru>Подписываем договор, настраиваем систему — контент начинает выходить по расписанию без вашего участия.</div>
+        <div class="p-desc" data-en>We sign off, set up the pipeline — content ships on schedule with zero input from you.</div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="p-num">Step 04</div>
+      <div>
+        <div class="p-title" data-ru>Отчёт и итерация</div>
+        <div class="p-title" data-en>Report & iterate</div>
+        <div class="p-desc" data-ru>Еженедельно присылаем отчёт по охватам и вовлечённости. Что не работает — меняем на следующей неделе.</div>
+        <div class="p-desc" data-en>Weekly report on reach and engagement. What underperforms gets replaced the following week.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="section-label" style="justify-content:center" data-ru>Готов начать?</div>
+  <div class="section-label" style="justify-content:center" data-en>Ready to start?</div>
+  <h2 class="section-title reveal">
+    <span data-ru>Получи 3 примера<br>контента бесплатно</span>
+    <span data-en>Get 3 content samples<br>for free</span>
+  </h2>
+  <p class="section-sub reveal">
+    <span data-ru>Никакого риска. Просто покажем что умеем — ты решаешь дальше сам.</span>
+    <span data-en>Zero risk. We show what we can do — you decide from there.</span>
+  </p>
+  <a href="#contact" class="btn-primary reveal">
+    <span data-ru>Оставить заявку</span>
+    <span data-en>Leave a request</span>
+  </a>
+</section>
+
+<!-- Contact -->
+<section id="contact" style="padding-top:60px">
+  <div class="section-label" data-ru>Контакт</div>
+  <div class="section-label" data-en>Contact</div>
+  <h2 class="section-title reveal">
+    <span data-ru>Напишите нам</span>
+    <span data-en>Get in touch</span>
+  </h2>
+  <div class="contact-wrap reveal">
+    <div>
+      <div class="form-group">
+        <label class="form-label" data-ru>Ваше имя</label>
+        <label class="form-label" data-en>Your name</label>
+        <input type="text" class="form-input" placeholder="Alex">
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-ru>Email или Telegram</label>
+        <label class="form-label" data-en>Email or Telegram</label>
+        <input type="text" class="form-input" placeholder="@username / you@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-ru>Ваша ниша</label>
+        <label class="form-label" data-en>Your niche</label>
+        <select class="form-input">
+          <option data-ru>E-commerce / Wildberries</option>
+          <option data-ru>Юристы / Эксперты</option>
+          <option data-ru>Недвижимость</option>
+          <option data-ru>Coaches / Инфобизнес</option>
+          <option data-ru>SaaS / Стартап</option>
+          <option data-ru>Другое</option>
+          <option data-en>E-commerce / Amazon</option>
+          <option data-en>Law / Professional services</option>
+          <option data-en>Real estate</option>
+          <option data-en>Coaches / Creators</option>
+          <option data-en>SaaS / Startup</option>
+          <option data-en>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-ru>Комментарий (опционально)</label>
+        <label class="form-label" data-en>Notes (optional)</label>
+        <textarea class="form-input" data-ru placeholder="Расскажите о проекте..."></textarea>
+        <textarea class="form-input" data-en placeholder="Tell us about your project..."></textarea>
+      </div>
+      <button class="form-submit" data-ru>Отправить заявку →</button>
+      <button class="form-submit" data-en>Send request →</button>
+    </div>
+    <div class="contact-info">
+      <div>
+        <div class="contact-item-label">Telegram</div>
+        <div class="contact-item-val">@nevo_agency</div>
+      </div>
+      <div>
+        <div class="contact-item-label">Email</div>
+        <div class="contact-item-val">hello@nevo.agency</div>
+      </div>
+      <div>
+        <div class="contact-item-label" data-ru>Ответ в течение</div>
+        <div class="contact-item-label" data-en>Response time</div>
+        <div class="contact-item-val" data-ru>2–4 часов в рабочее время</div>
+        <div class="contact-item-val" data-en>2–4 hours during business hours</div>
+      </div>
+      <div>
+        <div class="contact-item-label" data-ru>Примеры — бесплатно</div>
+        <div class="contact-item-label" data-en>Free samples</div>
+        <div class="contact-item-val" style="font-size:14px;color:var(--muted)" data-ru>Присылаем 3 примера контента под вашу нишу в течение 48 часов после заявки.</div>
+        <div class="contact-item-val" style="font-size:14px;color:var(--muted)" data-en>We send 3 content samples for your niche within 48 hours of your request.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-left">
+    <span data-ru>© 2025 Nevo. Все права защищены.</span>
+    <span data-en>© 2025 Nevo. All rights reserved.</span>
+  </div>
+  <div class="footer-right">
+    <a href="#services" data-ru>Услуги</a>
+    <a href="#services" data-en>Services</a>
+    <a href="#pricing" data-ru>Цены</a>
+    <a href="#pricing" data-en>Pricing</a>
+    <a href="#contact">Telegram</a>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    rx += (e.clientX - rx) * 0.12;
+    ry += (e.clientY - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+  });
+  document.querySelectorAll('a,button,.lang-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.transform = 'translate(-50%,-50%) scale(1.4)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.transform = 'translate(-50%,-50%) scale(1)'; });
+  });
+  function animRing() {
+    rx += (parseFloat(cursor.style.left||0) - rx) * 0.12;
+    ry += (parseFloat(cursor.style.top||0) - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // Navbar scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Lang
+  function setLang(l) {
+    document.body.classList.toggle('lang-ru', l === 'ru');
+    document.body.classList.toggle('lang-en', l === 'en');
+    document.getElementById('btn-ru').classList.toggle('active', l === 'ru');
+    document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  }
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
