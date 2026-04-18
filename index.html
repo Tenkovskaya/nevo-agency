@@ -35,7 +35,7 @@
     cursor: none;
   }
 
-  /* Custom cursor */
+  /* ═══════════════ CURSOR ═══════════════ */
   .cursor {
     width: 8px; height: 8px;
     background: var(--accent);
@@ -57,7 +57,7 @@
     transition: all .08s linear;
   }
 
-  /* Noise overlay */
+  /* ═══════════════ NOISE OVERLAY ═══════════════ */
   body::before {
     content: '';
     position: fixed;
@@ -68,11 +68,11 @@
     opacity: 0.4;
   }
 
-  /* Lang switcher */
+  /* ═══════════════ LANG SWITCHER ═══════════════ */
   .lang-switch {
     position: fixed;
-    top: 24px; right: 24px;
-    z-index: 500;
+    top: 22px; right: 20px;
+    z-index: 450;
     display: flex;
     background: var(--surface);
     border: 1px solid var(--border2);
@@ -94,7 +94,7 @@
     font-weight: 400;
   }
 
-  /* Nav */
+  /* ═══════════════ NAVIGATION ═══════════════ */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -103,6 +103,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 48px;
+    padding-right: 130px;
     border-bottom: 1px solid transparent;
     transition: border-color .3s, background .3s;
   }
@@ -149,7 +150,7 @@
   }
   .nav-cta:hover { opacity: .88; transform: translateY(-1px); }
 
-  /* Hero */
+  /* ═══════════════ HERO ═══════════════ */
   .hero {
     min-height: 100vh;
     display: flex;
@@ -160,7 +161,7 @@
     overflow: hidden;
   }
 
-  /* Grid bg */
+  /* HERO: grid background */
   .hero::after {
     content: '';
     position: absolute;
@@ -247,7 +248,7 @@
   .btn-ghost:hover { color: var(--text); }
   .btn-ghost::after { content: '→'; }
 
-  /* Marquee */
+  /* ═══════════════ MARQUEE ═══════════════ */
   .marquee-wrap {
     overflow: hidden;
     border-top: 1px solid var(--border);
@@ -282,7 +283,7 @@
     to { transform: translateX(-50%); }
   }
 
-  /* Sections */
+  /* ═══════════════ SECTIONS (shared) ═══════════════ */
   section { padding: 120px 48px; }
   .section-label {
     font-family: var(--mono);
@@ -309,7 +310,7 @@
     margin-bottom: 64px;
   }
 
-  /* Services */
+  /* ═══════════════ SERVICES ═══════════════ */
   .services-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -372,7 +373,7 @@
     letter-spacing: .04em;
   }
 
-  /* Pricing */
+  /* ═══════════════ PRICING ═══════════════ */
   .pricing-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -476,7 +477,7 @@
   }
   .price-cta.filled:hover { opacity: .88; }
 
-  /* Process */
+  /* ═══════════════ PROCESS ═══════════════ */
   .process-list {
     display: flex;
     flex-direction: column;
@@ -511,7 +512,7 @@
     line-height: 1.65;
   }
 
-  /* Stats */
+  /* ═══════════════ STATS ═══════════════ */
   .stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -543,7 +544,7 @@
     letter-spacing: .08em;
   }
 
-  /* CTA section */
+  /* ═══════════════ CTA SECTION ═══════════════ */
   .cta-section {
     text-align: center;
     padding: 120px 48px;
@@ -561,7 +562,7 @@
   .cta-section .section-title { font-size: clamp(40px, 6vw, 80px); }
   .cta-section .section-sub { margin: 0 auto 48px; text-align: center; }
 
-  /* Contact form */
+  /* ═══════════════ CONTACT FORM ═══════════════ */
   .contact-wrap {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -631,7 +632,7 @@
     color: var(--text);
   }
 
-  /* Footer */
+  /* ═══════════════ FOOTER ═══════════════ */
   footer {
     border-top: 1px solid var(--border);
     padding: 40px 48px;
@@ -655,7 +656,7 @@
   .footer-right a { color: inherit; text-decoration: none; transition: color .2s; }
   .footer-right a:hover { color: var(--text); }
 
-  /* Animations */
+  /* ═══════════════ ANIMATIONS ═══════════════ */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
     to { opacity: 1; transform: translateY(0); }
@@ -665,7 +666,7 @@
   .hero-sub { animation: fadeUp .7s .2s ease both; }
   .hero-actions { animation: fadeUp .7s .3s ease both; }
 
-  /* Flicker for mono texts */
+  /* ANIMATION: flicker */
   @keyframes flicker {
     0%,100% { opacity: 1; }
     92% { opacity: 1; }
@@ -674,9 +675,9 @@
   }
   .hero-tag { animation: fadeUp .6s ease both, flicker 8s 2s infinite; }
 
-  /* Responsive */
+  /* ═══════════════ RESPONSIVE ═══════════════ */
   @media (max-width: 900px) {
-    nav { padding: 16px 24px; }
+    nav { padding: 16px 24px; padding-right: 110px; }
     .nav-links { display: none; }
     .hero { padding: 100px 24px 60px; }
     section { padding: 80px 24px; }
@@ -686,10 +687,10 @@
     .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
     footer { flex-direction: column; gap: 16px; text-align: center; }
     .cta-section { padding: 80px 24px; }
-    .lang-switch { top: 16px; right: 16px; }
+    .lang-switch { top: 14px; right: 12px; }
   }
 
-  /* Hidden by lang */
+  /* ═══════════════ LANGUAGE SWITCHING ═══════════════ */
   [data-ru], [data-en] { display: block; }
   .lang-en [data-ru] { display: none !important; }
   .lang-ru [data-en] { display: none !important; }
@@ -697,7 +698,7 @@
   .lang-en span[data-ru] { display: none !important; }
   .lang-ru span[data-en] { display: none !important; }
 
-  /* Scroll reveal */
+  /* ═══════════════ SCROLL REVEAL ═══════════════ */
   .reveal {
     opacity: 0;
     transform: translateY(20px);
@@ -711,6 +712,15 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>emailjs.init('6IYdiL04BjYAk2v4Q');</script>
+
+  <!-- Google Analytics — замените G-XXXXXXXXXX на ваш Measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
 </head>
 <body class="lang-ru">
 
@@ -1108,7 +1118,7 @@
 </footer>
 
 <script>
-  // Cursor
+  // ── Cursor ──────────────────────────────
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let rx = 0, ry = 0;
@@ -1133,12 +1143,14 @@
   }
   animRing();
 
-  // Navbar scroll
+
+  // ── Navbar scroll ───────────────────────
   window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
   });
 
-  // Lang
+
+  // ── Language switcher ──────────────────
   function setLang(l) {
     document.body.classList.toggle('lang-ru', l === 'ru');
     document.body.classList.toggle('lang-en', l === 'en');
@@ -1146,7 +1158,22 @@
     document.getElementById('btn-en').classList.toggle('active', l === 'en');
   }
 
-  // Scroll reveal
+
+
+  // ── Analytics: CTA tracking ────────────
+  document.querySelectorAll('.btn-primary, .nav-cta, .price-cta').forEach(function(el) {
+    el.addEventListener('click', function() {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'cta_click', {
+          event_category: 'engagement',
+          event_label: el.textContent.trim().substring(0, 50)
+        });
+      }
+    });
+  });
+
+
+  // ── Scroll reveal ───────────────────────
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.12 });
@@ -1220,6 +1247,14 @@
 
     try {
       await Promise.all([sendToTelegram(data), sendToEmail(data)]);
+
+    // GA event tracking
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'form_submit', {
+        event_category: 'leads',
+        event_label: data.niche
+      });
+    }
       setBtn(btn, isRu ? 'Заявка отправлена!' : 'Request sent!', '#2d9e5f', true);
       inputs[0].value = ''; inputs[1].value = '';
       if (textarea) textarea.value = '';
