@@ -23,7 +23,7 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
   body {
     background: var(--bg);
@@ -33,6 +33,7 @@
     line-height: 1.6;
     overflow-x: hidden;
     cursor: none;
+    -webkit-font-smoothing: antialiased;
   }
 
   /* ═══════════════ CURSOR ═══════════════ */
@@ -260,6 +261,7 @@
     gap: 0;
     animation: marquee 28s linear infinite;
     white-space: nowrap;
+    will-change: transform;
   }
   .marquee-item {
     font-family: var(--mono);
@@ -708,8 +710,9 @@
   /* ═══════════════ SCROLL REVEAL ═══════════════ */
   .reveal {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity .6s ease, transform .6s ease;
+    transform: translateY(16px);
+    transition: opacity .55s cubic-bezier(0.22, 1, 0.36, 1), transform .55s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
   }
   .reveal.visible {
     opacity: 1;
@@ -1088,7 +1091,7 @@
     <div class="contact-info">
       <div>
         <div class="contact-item-label">Telegram</div>
-        <div class="contact-item-val">@nevo_agency</div>
+        <div class="contact-item-val"><a href="https://t.me/nevo_agency" style="color:var(--accent);text-decoration:none;" target="_blank">@nevo_agency</a></div>
       </div>
       <div>
         <div class="contact-item-label">Email</div>
@@ -1121,7 +1124,7 @@
     <a href="#services" data-en>Services</a>
     <a href="#pricing" data-ru>Цены</a>
     <a href="#pricing" data-en>Pricing</a>
-    <a href="#contact">Telegram</a>
+    <a href="https://t.me/nevo_agency" target="_blank">Telegram</a>
   </div>
 </footer>
 
@@ -1157,6 +1160,20 @@
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
   });
 
+  // ── Smooth anchor scroll with nav offset ────
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#') return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      const navH = document.getElementById('navbar').offsetHeight;
+      const top = target.getBoundingClientRect().top + window.pageYOffset - navH - 16;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+
 
   // ── Language switcher ──────────────────
   function setLang(l) {
@@ -1182,10 +1199,24 @@
 
 
   // ── Scroll reveal ───────────────────────
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  const obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(function(el, i) {
+    // Stagger siblings within same parent
+    var siblings = Array.from(el.parentElement.querySelectorAll('.reveal'));
+    var idx = siblings.indexOf(el);
+    if (idx > 0) {
+      el.style.transitionDelay = (idx * 0.07) + 's';
+    }
+    obs.observe(el);
+  });
 </script>
 
 
