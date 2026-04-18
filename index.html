@@ -708,6 +708,9 @@
     transform: translateY(0);
   }
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('6IYdiL04BjYAk2v4Q');</script>
 </head>
 <body class="lang-ru">
 
@@ -1150,22 +1153,39 @@
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 
+
+
 <script>
 (function() {
   var BOT_TOKEN = '8740844003:AAGMHjIzlCwFTx2yRj7cjTeM4C2c5rnnQKg';
   var CHAT_ID = '541797367';
+  var EMAILJS_SERVICE = 'service_ta40c6m';
+  var EMAILJS_TEMPLATE = 'template_lvo0ktm';
 
   function sendToTelegram(data) {
-    var text = "* Новая заявка с сайта Nevo *\n\n"
+    var d = new Date().toLocaleString('ru-RU', {timeZone:'Europe/Moscow'});
+    var text = "*Новая заявка — Nevo Agency*\n\n"
       + "Имя: " + data.name + "\n"
       + "Контакт: " + data.contact + "\n"
       + "Ниша: " + data.niche + "\n"
       + "Комментарий: " + (data.comment || "—") + "\n\n"
-      + new Date().toLocaleString('ru-RU', {timeZone:'Europe/Moscow'});
+      + d;
     return fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({chat_id: CHAT_ID, text: text, parse_mode: 'Markdown'})
+    });
+  }
+
+  function sendToEmail(data) {
+    return emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      name: data.name,
+      contact: data.contact,
+      niche: data.niche,
+      message: data.comment || '—',
+      time: new Date().toLocaleString('ru-RU', {timeZone:'Europe/Moscow'}),
+      email: data.contact.includes('@') && !data.contact.includes('t.me') && !data.contact.startsWith('@')
+        ? data.contact : 'noreply@nevo.agency'
     });
   }
 
@@ -1194,16 +1214,21 @@
     if (!name) { inputs[0].style.borderColor = '#e24b4a'; return; }
     if (!contact) { inputs[1].style.borderColor = '#e24b4a'; return; }
 
-    setBtn(btn, isRu ? 'Отправляем...' : 'Sending...', '#555', true);
+    setBtn(btn, isRu ? 'Отправляем...' : 'Sending...', '#444', true);
+
+    var data = {name: name, contact: contact, niche: niche, comment: comment};
 
     try {
-      await sendToTelegram({name:name, contact:contact, niche:niche, comment:comment});
+      await Promise.all([sendToTelegram(data), sendToEmail(data)]);
       setBtn(btn, isRu ? 'Заявка отправлена!' : 'Request sent!', '#2d9e5f', true);
       inputs[0].value = ''; inputs[1].value = '';
       if (textarea) textarea.value = '';
-      setTimeout(function(){ setBtn(btn, isRu ? 'Отправить заявку' : 'Send request', '', false); }, 5000);
+      setTimeout(function(){
+        setBtn(btn, isRu ? 'Отправить заявку →' : 'Send request →', '', false);
+      }, 5000);
     } catch(err) {
-      setBtn(btn, isRu ? 'Ошибка, повторите' : 'Error, try again', '#e24b4a', false);
+      console.error('Send error:', err);
+      setBtn(btn, isRu ? 'Ошибка — попробуйте снова' : 'Error — try again', '#e24b4a', false);
     }
   });
 })();
