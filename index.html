@@ -71,7 +71,7 @@
   /* ═══════════════ LANG SWITCHER ═══════════════ */
   .lang-switch {
     position: fixed;
-    top: 22px; right: 20px;
+    top: 22px; right: 24px;
     z-index: 450;
     display: flex;
     background: var(--surface);
@@ -103,7 +103,6 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 48px;
-    padding-right: 130px;
     border-bottom: 1px solid transparent;
     transition: border-color .3s, background .3s;
   }
@@ -677,17 +676,25 @@
 
   /* ═══════════════ RESPONSIVE ═══════════════ */
   @media (max-width: 900px) {
-    nav { padding: 16px 24px; padding-right: 110px; }
+    nav { padding: 16px 20px; }
+    .nav-cta { display: none; }
     .nav-links { display: none; }
-    .hero { padding: 100px 24px 60px; }
-    section { padding: 80px 24px; }
+    .hero { padding: 90px 20px 50px; }
+    section { padding: 60px 20px; }
     .services-grid { grid-template-columns: 1fr; }
     .pricing-grid { grid-template-columns: 1fr; }
     .stats-row { grid-template-columns: 1fr 1fr; }
+    .stat-num { font-size: 36px; }
+    .stat-box { padding: 24px 16px; }
     .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
     footer { flex-direction: column; gap: 16px; text-align: center; }
-    .cta-section { padding: 80px 24px; }
-    .lang-switch { top: 14px; right: 12px; }
+    .cta-section { padding: 60px 20px; }
+    .lang-switch { top: 14px; right: 12px; font-size: 12px; }
+    .lang-btn { padding: 6px 12px; }
+    .marquee-item { font-size: 10px; padding: 0 20px; }
+    .hero-sub { font-size: 15px; }
+    .process-step { grid-template-columns: 60px 1fr; gap: 16px; }
+    .footer-right { gap: 16px; flex-wrap: wrap; justify-content: center; }
   }
 
   /* ═══════════════ LANGUAGE SWITCHING ═══════════════ */
