@@ -563,6 +563,101 @@
   .cta-section .section-title { font-size: clamp(40px, 6vw, 80px); }
   .cta-section .section-sub { margin: 0 auto 48px; text-align: center; }
 
+
+  /* ═══════════════ CASES ═══════════════ */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .case-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-lg, 12px);
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: border-color .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .case-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s ease;
+  }
+  .case-card:hover { border-color: var(--border2); }
+  .case-card:hover::before { transform: scaleX(1); }
+  .case-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .case-niche {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .06em;
+  }
+  .case-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    color: var(--accent);
+    letter-spacing: .04em;
+    white-space: nowrap;
+  }
+  .case-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.25;
+    color: var(--text);
+  }
+  .case-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    flex: 1;
+  }
+  .case-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+  }
+  .case-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .case-metric-num {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.03em;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .case-metric-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .04em;
+    line-height: 1.4;
+  }
+
   /* ═══════════════ CONTACT FORM ═══════════════ */
   .contact-wrap {
     display: grid;
@@ -689,6 +784,10 @@
     .stat-num { font-size: 36px; }
     .stat-box { padding: 24px 16px; }
     .contact-wrap { grid-template-columns: 1fr; gap: 48px; }
+
+    .cases-grid { grid-template-columns: 1fr; }
+    .case-metrics { grid-template-columns: repeat(3, 1fr); }
+    .case-metric-num { font-size: 18px; }
     footer { flex-direction: column; gap: 16px; text-align: center; }
     .cta-section { padding: 60px 20px; }
     .lang-switch { top: 14px; right: 12px; font-size: 12px; }
@@ -752,6 +851,7 @@
     <li><a href="#services" data-ru>Услуги</a><a href="#services" data-en>Services</a></li>
     <li><a href="#pricing" data-ru>Цены</a><a href="#pricing" data-en>Pricing</a></li>
     <li><a href="#process" data-ru>Процесс</a><a href="#process" data-en>Process</a></li>
+    <li><a href="#cases" data-ru>Кейсы</a><a href="#cases" data-en>Cases</a></li>
     <li><a href="#contact" data-ru>Контакт</a><a href="#contact" data-en>Contact</a></li>
   </ul>
   <a href="#contact" class="nav-cta">
@@ -1022,6 +1122,117 @@
   </div>
 </section>
 
+
+<!-- Cases -->
+<section id="cases">
+  <div class="section-label" data-ru>Кейсы</div>
+  <div class="section-label" data-en>Case studies</div>
+  <h2 class="section-title reveal">
+    <span data-ru>Результаты<br>в цифрах</span>
+    <span data-en>Results<br>in numbers</span>
+  </h2>
+  <p class="section-sub reveal">
+    <span data-ru>Реальные задачи, конкретные метрики. Без воды.</span>
+    <span data-en>Real tasks, concrete metrics. No fluff.</span>
+  </p>
+  <div class="cases-grid reveal">
+
+    <div class="case-card">
+      <div class="case-header">
+        <div class="case-niche" data-ru>E-commerce · Wildberries</div>
+        <div class="case-niche" data-en>E-commerce · Wildberries</div>
+        <div class="case-tag" data-ru>Контент-машина</div>
+        <div class="case-tag" data-en>Content engine</div>
+      </div>
+      <div class="case-title" data-ru>120 карточек товаров за 4 дня</div>
+      <div class="case-title" data-en>120 product cards in 4 days</div>
+      <div class="case-desc" data-ru>Магазин детской одежды запустил новую коллекцию. Нужны были SEO-описания для 120 SKU с ключевыми словами, УТП и структурой под WB-алгоритм.</div>
+      <div class="case-desc" data-en>A children's clothing store launched a new collection. Needed SEO descriptions for 120 SKUs with keywords, USPs and WB algorithm structure.</div>
+      <div class="case-metrics">
+        <div class="case-metric">
+          <span class="case-metric-num">+34%</span>
+          <span class="case-metric-label" data-ru>конверсия в корзину</span>
+          <span class="case-metric-label" data-en>add-to-cart rate</span>
+        </div>
+        <div class="case-metric">
+          <span class="case-metric-num">4 дня</span>
+          <span class="case-metric-num" data-en>4 days</span>
+          <span class="case-metric-label" data-ru>вместо 3 недель штатника</span>
+          <span class="case-metric-label" data-en>vs 3 weeks in-house</span>
+        </div>
+        <div class="case-metric">
+          <span class="case-metric-num">-80%</span>
+          <span class="case-metric-label" data-ru>стоимость vs агентство</span>
+          <span class="case-metric-label" data-en>cost vs agency</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <div class="case-niche" data-ru>Недвижимость · Москва</div>
+        <div class="case-niche" data-en>Real estate · Moscow</div>
+        <div class="case-tag" data-ru>Email-воронка</div>
+        <div class="case-tag" data-en>Email sequence</div>
+      </div>
+      <div class="case-title" data-ru>Welcome-цепочка из 7 писем</div>
+      <div class="case-title" data-en>7-email welcome sequence</div>
+      <div class="case-desc" data-ru>Агентство собирало лиды через сайт, но 90% не отвечали на звонки. Написали 7-письмовую цепочку прогрева с историями, возражениями и CTA на звонок.</div>
+      <div class="case-desc" data-en>Agency collected leads via website but 90% didn't answer calls. We wrote a 7-email nurture sequence with stories, objection handling and call CTA.</div>
+      <div class="case-metrics">
+        <div class="case-metric">
+          <span class="case-metric-num">41%</span>
+          <span class="case-metric-label" data-ru>open rate писем</span>
+          <span class="case-metric-label" data-en>email open rate</span>
+        </div>
+        <div class="case-metric">
+          <span class="case-metric-num">+22%</span>
+          <span class="case-metric-label" data-ru>звонков с лидов</span>
+          <span class="case-metric-label" data-en>calls from leads</span>
+        </div>
+        <div class="case-metric">
+          <span class="case-metric-num">14 дней</span>
+          <span class="case-metric-num" data-en>14 days</span>
+          <span class="case-metric-label" data-ru>от брифа до запуска</span>
+          <span class="case-metric-label" data-en>brief to launch</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-card">
+      <div class="case-header">
+        <div class="case-niche" data-ru>Эксперт · Telegram-канал</div>
+        <div class="case-niche" data-en>Expert · Telegram channel</div>
+        <div class="case-tag" data-ru>Контент 3 мес.</div>
+        <div class="case-tag" data-en>3 months content</div>
+      </div>
+      <div class="case-title" data-ru>0 → 4800 подписчиков за 90 дней</div>
+      <div class="case-title" data-en>0 → 4,800 subscribers in 90 days</div>
+      <div class="case-desc" data-ru>Финансовый консультант хотел личный бренд в Telegram. Вели канал с нуля: 5 постов в неделю, контент-план, адаптация под аудиторию 35–55 лет.</div>
+      <div class="case-desc" data-en>Financial advisor wanted a personal brand in Telegram. Ran the channel from scratch: 5 posts/week, content plan, audience adaptation for 35–55 age group.</div>
+      <div class="case-metrics">
+        <div class="case-metric">
+          <span class="case-metric-num">4 800</span>
+          <span class="case-metric-num" data-en">4,800</span>
+          <span class="case-metric-label" data-ru>подписчиков за 90 дней</span>
+          <span class="case-metric-label" data-en>subscribers in 90 days</span>
+        </div>
+        <div class="case-metric">
+          <span class="case-metric-num">18%</span>
+          <span class="case-metric-label" data-ru>средний ERR постов</span>
+          <span class="case-metric-label" data-en>avg post ERR</span>
+        </div>
+        <div class="case-metric">
+          <span class="case-metric-num">×3</span>
+          <span class="case-metric-label" data-ru>новых клиента в мес.</span>
+          <span class="case-metric-label" data-en>new clients/month</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section">
   <div class="cta-glow"></div>
@@ -1224,7 +1435,7 @@
 <script>
 (function() {
   var BOT_TOKEN = '8740844003:AAGMHjIzlCwFTx2yRj7cjTeM4C2c5rnnQKg';
-  var CHAT_ID = '541797367';
+  var CHAT_ID = '8213725072';
   var EMAILJS_SERVICE = 'service_ta40c6m';
   var EMAILJS_TEMPLATE = 'template_lvo0ktm';
 
