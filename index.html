@@ -179,12 +179,13 @@
     font-family: var(--mono);
     font-size: 11px;
     color: var(--accent);
-    letter-spacing: .15em;
+    letter-spacing: .1em;
     text-transform: uppercase;
     margin-bottom: 32px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
+    line-height: 1.5;
   }
   .hero-tag::before {
     content: '';
@@ -198,7 +199,6 @@
     font-weight: 800;
     line-height: 1;
     letter-spacing: -.04em;
-    max-width: 900px;
     margin-bottom: 32px;
   }
   .hero-title .line2 { color: var(--accent); display: block; }
@@ -256,13 +256,18 @@
     border-bottom: 1px solid var(--border);
     padding: 14px 0;
     margin: 0;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
   }
   .marquee-track {
     display: flex;
     gap: 0;
-    animation: marquee 28s linear infinite;
+    animation: marquee 32s linear infinite;
     white-space: nowrap;
     will-change: transform;
+  }
+  .marquee-wrap:hover .marquee-track {
+    animation-play-state: paused;
   }
   .marquee-item {
     font-family: var(--mono);
@@ -777,7 +782,10 @@
     nav { padding: 16px 20px; padding-right: 115px; }
     .nav-cta { display: none; }
     .nav-links { display: none; }
-    .hero { padding: 90px 20px 50px; }
+    .hero { padding: 90px 20px 50px; overflow-x: hidden; }
+    .hero-title { font-size: 11vw; hyphens: auto; -webkit-hyphens: auto; }
+
+
     section { padding: 60px 20px; }
     .services-grid { grid-template-columns: 1fr; }
     .pricing-grid { grid-template-columns: 1fr; }
@@ -795,8 +803,12 @@
     .lang-btn { padding: 6px 12px; }
     .marquee-item { font-size: 10px; padding: 0 20px; }
     .hero-sub { font-size: 15px; }
+    .hero-tag { font-size: 10px; letter-spacing: .08em; }
+    .hero-tag::before { width: 16px; margin-top: 4px; flex-shrink: 0; }
     .process-step { grid-template-columns: 60px 1fr; gap: 16px; }
     .footer-right { gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+
   }
 
   /* ═══════════════ LANGUAGE SWITCHING ═══════════════ */
@@ -818,7 +830,7 @@
     opacity: 1;
     transform: translateY(0);
   }
-</style>
+  }</style>
 
 
 
@@ -864,7 +876,7 @@
 <section class="hero">
   <div class="hero-tag">
     <span data-ru>AI-оптимизация бизнеса · Москва / Remote</span>
-    <span data-en>AI business optimization · Moscow / Remote</span>
+    <span data-en>AI business optimization<br>· Moscow / Remote</span>
   </div>
   <h1 class="hero-title">
     <span data-ru>AI-оптимизация<br><span class="line2">вашего бизнеса</span></span>
@@ -1156,7 +1168,6 @@
         </div>
         <div class="case-metric">
           <span class="case-metric-num">4 дня</span>
-          <span class="case-metric-num" data-en>4 days</span>
           <span class="case-metric-label" data-ru>вместо 3 недель штатника</span>
           <span class="case-metric-label" data-en>vs 3 weeks in-house</span>
         </div>
@@ -1192,7 +1203,6 @@
         </div>
         <div class="case-metric">
           <span class="case-metric-num">14 дней</span>
-          <span class="case-metric-num" data-en>14 days</span>
           <span class="case-metric-label" data-ru>от брифа до запуска</span>
           <span class="case-metric-label" data-en>brief to launch</span>
         </div>
@@ -1213,7 +1223,6 @@
       <div class="case-metrics">
         <div class="case-metric">
           <span class="case-metric-num">4 800</span>
-          <span class="case-metric-num" data-en">4,800</span>
           <span class="case-metric-label" data-ru>подписчиков за 90 дней</span>
           <span class="case-metric-label" data-en>subscribers in 90 days</span>
         </div>
@@ -1315,10 +1324,10 @@
         <div class="contact-item-val" data-en>2–4 hours during business hours</div>
       </div>
       <div>
-        <div class="contact-item-label" data-ru>Примеры — бесплатно</div>
-        <div class="contact-item-label" data-en>Free samples</div>
-        <div class="contact-item-val" style="font-size:14px;color:var(--muted)" data-ru>Присылаем 3 примера контента под вашу нишу в течение 48 часов после заявки.</div>
-        <div class="contact-item-val" style="font-size:14px;color:var(--muted)" data-en>We send 3 content samples for your niche within 48 hours of your request.</div>
+        <div class="contact-item-label" data-ru>AI-аудит — бесплатно</div>
+        <div class="contact-item-label" data-en>Free AI audit</div>
+        <div class="contact-item-val" style="font-size:14px;color:var(--muted)" data-ru>Разберём ваш бизнес и покажем где ИИ высвободит время и деньги — в течение 48 часов.</div>
+        <div class="contact-item-val" style="font-size:14px;color:var(--muted)" data-en>We analyse your business and show where AI saves time and money — within 48 hours.</div>
       </div>
     </div>
   </div>
